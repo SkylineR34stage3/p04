@@ -49,8 +49,10 @@ def write_file(f: typing.IO[str], content: str) -> int | None:
     try:
         return f.write(content)
     except OSError as e:
-        print(f"Error occured while writing to a file: {e}")
+        print(f"Error occurred while writing to a file: {e}")
         return None
+    finally:
+        f.close()
 
 
 def transform(filename: str) -> None:
