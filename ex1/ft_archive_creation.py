@@ -16,27 +16,16 @@ def open_file(filename: str, mode: str = "r") -> typing.IO[str] | None:
         return None
 
 
-def cat_file(f: typing.IO[str]) -> None:
-    print("---\n")
-    print(f.read())
-    print("\n---")
-
-
-def access() -> str | None:
-    filename = parse_argv(sys.argv)
-    if not filename:
-        print("Usage: ft_ancient_text.py <file>")
+def cat_file(f: typing.IO[str], filename: str) -> bool | None:
+    try:
+        print(f"---\n\n{f.read()}\n\n---")
+        return True
+    except OSError as e:
+        print(f"Error occurred while reading a file: {e}")
         return None
-
-    print("=== Cyber Archives Recovery ===")
-    print(f"Accessing file '{filename}'")
-    f = open_file(filename)
-    if f is None:
-        return None
-    cat_file(f)
-    f.close()
-    print(f"File '{filename}' closed.")
-    return filename
+    finally:
+        f.close()
+        print(f"File '{filename}' closed.")
 
 
 def transform_file(f: typing.IO[str]) -> str:
@@ -53,6 +42,22 @@ def write_file(f: typing.IO[str], content: str) -> int | None:
         return None
     finally:
         f.close()
+
+
+def access() -> str | None:
+    filename = parse_argv(sys.argv)
+    if not filename:
+        print("Usage: ft_ancient_text.py <file>")
+        return None
+
+    print("=== Cyber Archives Recovery ===")
+    print(f"Accessing file '{filename}'")
+    f = open_file(filename)
+    if f is None:
+        return None
+    if cat_file(f, filename) is None:
+        return None
+    return filename
 
 
 def transform(filename: str) -> None:
