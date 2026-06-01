@@ -17,10 +17,16 @@ def open_file(filename: str) -> typing.IO[str] | None:
         return None
 
 
-def cat_file(f: typing.IO[str]) -> None:
-    print("---\n")
-    print(f.read())
-    print("\n---")
+def cat_file(f: typing.IO[str], filename: str) -> bool | None:
+    try:
+        print(f"---\n\n{f.read()}\n\n---")
+        return True
+    except OSError as e:
+        print(f"Error occurred while reading a file: {e}")
+        return None
+    finally:
+        f.close()
+        print(f"File '{filename}' closed.")
 
 
 def main() -> None:
@@ -33,9 +39,7 @@ def main() -> None:
     f = open_file(filename)
     if f is None:
         return
-    cat_file(f)
-    f.close()
-    print(f"File '{filename}' closed.")
+    cat_file(f, filename)
 
 
 if __name__ == "__main__":
