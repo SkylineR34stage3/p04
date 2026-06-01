@@ -12,12 +12,18 @@ def open_file(filename: str) -> typing.IO[str] | None:
     print(f"Accessing file '{filename}'")
     try:
         return open(filename, "r")
-    except (FileNotFoundError, PermissionError, IsADirectoryError) as e:
+    except (OSError) as e:
         print(f"Error opening file '{filename}': {e}")
         return None
 
 
-def main():
+def cat_file(f: typing.IO[str]) -> None:
+    print("---\n")
+    print(f.read())
+    print("\n---")
+
+
+def main() -> None:
     filename = parse_argv(sys.argv)
     if not filename:
         print("Usage: ft_ancient_text.py <file>")
@@ -25,8 +31,11 @@ def main():
 
     print("=== Cyber Archives Recovery ===")
     f = open_file(filename)
-    if not f:
+    if f is None:
         return
+    cat_file(f)
+    f.close()
+    print(f"File '{filename}' closed.")
 
 
 if __name__ == "__main__":
