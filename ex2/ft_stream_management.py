@@ -12,7 +12,7 @@ def open_file(filename: str, mode: str = "r") -> typing.IO[str] | None:
     try:
         return open(filename, mode)
     except (OSError) as e:
-        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}")
+        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}\n")
         sys.stderr.flush()
         return None
 
@@ -22,7 +22,7 @@ def cat_file(f: typing.IO[str], filename: str) -> bool | None:
         print(f"---\n\n{f.read()}\n\n---")
         return True
     except OSError as e:
-        sys.stderr.write(f"[STDERR] Error occurred while reading a file: {e}")
+        sys.stderr.write(f"[STDERR] Error occurred while reading a file: {e}\n")
         sys.stderr.flush()
         return None
     finally:
@@ -41,7 +41,7 @@ def write_file(f: typing.IO[str], content: str) -> int | None:
         return f.write(content)
     except OSError as e:
         sys.stderr.write(
-            f"[STDERR] Error occurred while writing to a file: {e}"
+            f"[STDERR] Error occurred while writing to a file: {e}\n"
             )
         sys.stderr.flush()
         return None
@@ -65,6 +65,12 @@ def access() -> str | None:
     return filename
 
 
+def get_input() -> str:
+    sys.stdout.write("Enter new file name (or empty): ")
+    sys.stdout.flush()
+    return sys.stdin.readline().strip()
+
+
 def transform(filename: str) -> None:
     print("\nTransform data:")
     f = open_file(filename)
@@ -75,12 +81,13 @@ def transform(filename: str) -> None:
     f.close()
     print(f"---\n\n{f_content}\n\n---")
 
-    new_file = input("Enter new file name (or empty): ")
+    new_file = get_input()
     if not new_file:
         print("Not saving data.")
         return
     f = open_file(new_file, "w")
     if f is None:
+        print("Data not saved.")
         return
     print(f"Saving data to '{new_file}'")
     if write_file(f, f_content) is not None:
