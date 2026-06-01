@@ -12,7 +12,8 @@ def open_file(filename: str, mode: str = "r") -> typing.IO[str] | None:
     try:
         return open(filename, mode)
     except (OSError) as e:
-        print(f"Error opening file '{filename}': {e}")
+        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}")
+        sys.stderr.flush()
         return None
 
 
@@ -21,7 +22,8 @@ def cat_file(f: typing.IO[str], filename: str) -> bool | None:
         print(f"---\n\n{f.read()}\n\n---")
         return True
     except OSError as e:
-        print(f"Error occurred while reading a file: {e}")
+        sys.stderr.write(f"[STDERR] Error occurred while reading a file: {e}")
+        sys.stderr.flush()
         return None
     finally:
         f.close()
@@ -38,7 +40,10 @@ def write_file(f: typing.IO[str], content: str) -> int | None:
     try:
         return f.write(content)
     except OSError as e:
-        print(f"Error occurred while writing to a file: {e}")
+        sys.stderr.write(
+            f"[STDERR] Error occurred while writing to a file: {e}"
+            )
+        sys.stderr.flush()
         return None
     finally:
         f.close()
