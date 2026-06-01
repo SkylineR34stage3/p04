@@ -8,9 +8,9 @@ def parse_argv(argv: list[str]) -> str | None:
     return argv[1]
 
 
-def open_file(filename: str) -> typing.IO[str] | None:
+def open_file(filename: str, mode: str = "r") -> typing.IO[str] | None:
     try:
-        return open(filename, "r")
+        return open(filename, mode)
     except (OSError) as e:
         print(f"Error opening file '{filename}': {e}")
         return None
@@ -45,21 +45,41 @@ def transform_file(f: typing.IO[str]) -> str:
     return "\n".join(transformed)
 
 
+def write_file(f: typing.IO[str], content: str) -> int | None:
+    try:
+        return f.write(content)
+    except OSError as e:
+        print(f"Error occured while writing to a file: {e}")
+        return None
+
+
 def transform(filename: str) -> None:
     print("\nTransform data:")
     f = open_file(filename)
     if f is None:
-        return None
-    
+        return
+
     f_content = transform_file(f)
+    f.close()
     print(f"---\n\n{f_content}\n\n---")
-    
+
+    new_file = input("Enter new file name (or empty): ")
+    if not new_file:
+        print("Not saving data.")
+        return
+    f = open_file(new_file, "w")
+    if f is None:
+        return
+    print(f"Saving data to '{new_file}'")
+    if write_file(f, f_content) is not None:
+        print(f"Data saved in file '{new_file}'.")
+
 
 def main() -> None:
     filename = access()
     if not filename:
         return
-    
+
     transform(filename)
 
 
