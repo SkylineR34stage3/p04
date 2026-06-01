@@ -70,7 +70,11 @@ def transform(filename: str) -> None:
     f.close()
     print(f"---\n\n{f_content}\n\n---")
 
-    new_file = input("Enter new file name (or empty): ")
+    try:
+        new_file = input("Enter new file name (or empty): ")
+    except EOFError:
+        print(f"\nEOFError occurred")
+        return
     if not new_file:
         print("Not saving data.")
         return
