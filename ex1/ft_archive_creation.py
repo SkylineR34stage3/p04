@@ -85,6 +85,8 @@ def transform(filename: str) -> None:
         return
     if write_file(f, f_content) is not None:
         print(f"Data saved in file '{new_file}'.")
+    else:
+        print("Data not saved.")
 
 
 def main() -> None:
