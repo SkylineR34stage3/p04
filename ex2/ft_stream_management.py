@@ -22,7 +22,9 @@ def cat_file(f: typing.IO[str], filename: str) -> bool | None:
         print(f"---\n\n{f.read()}\n\n---")
         return True
     except OSError as e:
-        sys.stderr.write(f"[STDERR] Error occurred while reading a file: {e}\n")
+        sys.stderr.write(
+            f"[STDERR] Error occurred while reading a file: {e}\n"
+            )
         sys.stderr.flush()
         return None
     finally:
