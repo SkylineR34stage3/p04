@@ -85,13 +85,15 @@ def transform(filename: str) -> None:
     if not new_file:
         print("Not saving data.")
         return
+    print(f"Saving data to '{new_file}'")
     f = open_file(new_file, "w")
     if f is None:
         print("Data not saved.")
         return
-    print(f"Saving data to '{new_file}'")
     if write_file(f, f_content) is not None:
         print(f"Data saved in file '{new_file}'.")
+    else:
+        print("Data not saved.")
 
 
 def main() -> None:
